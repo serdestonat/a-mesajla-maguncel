@@ -2,40 +2,47 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-import random
-
-def playfair_tablosu():
+def playfair_tablosu(alfabe):
   """
-  6x6'lık bir Playfair tablosu oluşturur ve Türkçe alfabeyi yerleştirir.
-  Boş kalan 7 alana da nokta, virgül, noktalı virgül, iki nokta, 
-  ünlem işareti, soru işareti ve "&" işaretlerini yerleştirir.
+  Verilen alfabeyi kullanarak 6x6'lık Playfair tablosu oluşturur.
+
+  Parametreler:
+    alfabe (str): Tabloda kullanılacak harfleri içeren string.
+
+  Dönüş Değeri:
+    tablo (list): 6x6 boyutunda, her hücresi bir harf içeren liste.
   """
-  alfabe = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
-  tablo = [[None for _ in range(6)] for _ in range(6)]
 
-  # Harfleri tabloya yerleştirme
-  row = 0
-  col = 0
-  for harf in alfabe:
-    tablo[row][col] = harf
-    col += 1
-    if col == 6:
-      col = 0
-      row += 1
+  tablo = []
+  for i in range(6):
+    satir = []
+    for j in range(6):
+      if i * 6 + j < len(alfabe):
+        satir.append(alfabe[i * 6 + j])
+      else:
+        # Noktalama işaretlerini, "&" ve ":" işaretlerini yerleştirme
+        if i == 4 and j == 5: 
+          satir.append("&")
+        elif i == 5 and j == 0:
+          satir.append(".")
+        elif i == 5 and j == 1:
+          satir.append(",")
+        elif i == 5 and j == 2:
+          satir.append(":") 
+        elif i == 5 and j == 3:
+          satir.append(";")
+        elif i == 5 and j == 4:
+          satir.append("!")
+        elif i == 5 and j == 5:
+          satir.append("?")
+        else:
+          satir.append("")
+    tablo.append(satir)
+  return tablo
 
-  # Boş kalan alanlara özel karakterleri yerleştirme
-  boş_alanlar = ['.', ',', ';', ':', '!', '?', '&']
-  for harf in boş_alanlar:
-    while True:
-      row = random.randint(0, 5)
-      col = random.randint(0, 5)
-      if tablo[row][col] is None:
-        tablo[row][col] = harf
-        break
+alfabe = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
+tablo = playfair_tablosu(alfabe)
 
-  # Tabloyu çıktı olarak yazdırma
-  for satir in tablo:
-    print(' '.join(satir))
-
-# Playfair tablosunu oluşturma ve yazdırma
-playfair_tablosu()
+# Tabloyu yazdırma
+for satir in tablo:
+  print(" ".join(satir))

@@ -1,8 +1,9 @@
 import socket
 import threading
-from crypto import playfair_sifrele, playfair_desifrele
+from sifrelemedeneme import playfair_sifrele
+from socket1 import wifi_ipv4_address
 
-HOST = '192.168.1.14'
+HOST = wifi_ipv4_address
 PORT = 1234
 KULLANICI_LIMITI = 5
 ANAHTAR = "ANAHTAR"
@@ -12,7 +13,7 @@ def mesajlari_al(kullanici, kullanici_adi):
     while 1:
         mesaj = kullanici.recv(2048).decode('utf-8')
         if mesaj != '':
-            desifreli_mesaj = playfair_desifrele(mesaj, ANAHTAR)
+            desifreli_mesaj = playfair_sifrele(mesaj, ANAHTAR)
             final_msj = kullanici_adi + '~' + desifreli_mesaj
             mesajlari_tumune_gonder(final_msj)
         else:

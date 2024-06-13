@@ -3,9 +3,10 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 from tkinter import messagebox
-from crypto import playfair_sifrele, playfair_desifrele
+from sifrelemedeneme import playfair_sifrele
+from socket1 import wifi_ipv4_address
 
-HOST = '192.168.1.14'
+HOST = wifi_ipv4_address
 PORT = 1234
 ANAHTAR = "ANAHTAR"
 
@@ -92,15 +93,19 @@ import tkinter.messagebox as messagebox
 
 def serverden_mesaji_al(kullanici):
     while True:
-        mesaj = kullanici.recv(2048).decode('utf-8')
-        if not mesaj:
-            break
-        if mesaj.strip():  # Boş olmayan bir mesaj alındığında işlem yap
-            desifreli_mesaj = playfair_desifrele(mesaj, ANAHTAR)
-            mesaj_ekle(desifreli_mesaj)
-        else:
-            messagebox.showwarning("Boş Mesaj", "Boş bir mesaj alındı.")
-
+        try:
+            mesaj = kullanici.recv(2048).decode('utf-8')
+            if not mesaj:
+                break
+            if mesaj.strip():  # Boş olmayan bir mesaj alındığında işlem yap
+                sifreli_mesaj = playfair_sifrele(mesaj, ANAHTAR)
+                mesaj_ekle(sifreli_mesaj)
+            else:
+                messagebox.showwarning("Boş Mesaj", "Boş bir mesaj alındı.")
+        except ValueError as ve:
+            messagebox.showerror("Şifreleme Hatası",str(ve))
+        except Exception as e:
+            messagebox.showerror("Bilinmeyen Hata", str(e))
 
 def main():
     cerceve.mainloop()
